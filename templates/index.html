@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Accueil - NTICShop{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Styles personnalisés pour la page d'accueil */
+    .hero-section {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("https://img.freepik.com/photos-premium/composition-smartphone-utilise-pour-achats-numeriques-commandes-ligne_23-2151380452.jpg?ga=GA1.1.1368197787.1747577962&semt=ais_hybrid&w=740") no-repeat center center;
+        background-size: cover;
+        color: white;
+        padding: 8rem 0;
+        text-align: center;
+    }
+    .hero-section h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+    }
+    .hero-section p {
+        font-size: 1.25rem;
+        max-width: 800px;
+        margin: 0 auto 2.5rem auto;
+    }
+
+    .category-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none; /* Supprimer la bordure par défaut des cartes */
+    }
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+    }
+    .category-card .card-body {
+        height: 120px; /* Hauteur fixe pour le corps de la carte de catégorie */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .category-card img {
+        height: 150px; /* Hauteur fixe pour les images de catégorie */
+        object-fit: cover;
+        border-radius: 0.5rem 0.5rem 0 0; /* Coins arrondis seulement en haut */
+    }
+
+    .product-card-home {
+        height: 100%;
+        transition: transform 0.3s ease;
+    }
+    .product-card-home:hover {
+        transform: translateY(-5px);
+    }
+    .product-card-home .card-img-top {
+        height: 180px;
+        object-fit: cover;
+    }
+    .product-card-home .card-title {
+        min-height: 2.5rem; /* Ajusté pour l'aperçu */
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+
+    {# Section Héro avec un message d'accueil accrocheur #}
+    <section class="hero-section">
+        <div class="container">
+            <h1>Bienvenue chez NTICShop !</h1>
+            <p class="lead">Votre destination unique pour les meilleures technologies, la mode, la maison et bien plus encore.</p>
+            <a href="{% url 'liste_produits' %}" class="btn btn-primary btn-lg rounded-pill shadow-lg">Découvrir nos produits</a>
+        </div>
+    </section>
+
+    {# Section À Propos (optionnel) #}
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <img src="https://img.freepik.com/photos-premium/composition-smartphone-utilise-pour-achats-numeriques-commandes-ligne_23-2151380452.jpg?ga=GA1.1.1368197787.1747577962&semt=ais_hybrid&w=740" class="img-fluid rounded shadow-sm" alt="À propos de NTICShop">
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="text-primary fw-bold mb-4">Votre Partenaire Tech & Lifestyle</h2>
+                    <p class="lead">Chez NTICShop, nous nous engageons à vous offrir des produits de haute qualité à des prix imbattables.</p>
+                    <p>Que vous recherchiez les dernières innovations technologiques, les tendances mode du moment, des articles pour embellir votre intérieur ou des gadgets pour vos loisirs, notre catalogue est pensé pour vous. Nous sélectionnons rigoureusement nos articles pour garantir votre satisfaction.</p>
+                    <a href="#" class="btn btn-outline-primary mt-3">En savoir plus</a> {# Placeholder pour URL About Us #}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# Section Catégories Principales #}
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center fw-bold text-primary mb-5">Explorez nos Catégories</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {# Exemple de cartes de catégories. Vous pouvez les dynamiser avec des boucles si vous avez des images dédiées aux catégories #}
+                <div class="col">
+                    <div class="card h-100 shadow-sm category-card text-center">
+                        <img src="{% static 'img/cat-electronics.jpg' %}" class="card-img-top" alt="Électronique & Accessoires">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Électronique & Accessoires</h5>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <a href="#" class="btn btn-outline-primary btn-sm w-100">Voir les produits</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 shadow-sm category-card text-center">
+                        <img src="{% static 'img/cat-fashion.jpg' %}" class="card-img-top" alt="Mode & Beauté">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Mode & Beauté</h5>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <a href="#" class="btn btn-outline-primary btn-sm w-100">Voir les produits</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 shadow-sm category-card text-center">
+                        <img src="{% static 'img/cat-home.jpg' %}" class="card-img-top" alt="Maison & Vie quotidienne">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Maison & Vie quotidienne</h5>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <a href="#" class="btn btn-outline-primary btn-sm w-100">Voir les produits</a>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="text-center mt-5">
+                <a href="#" class="btn btn-primary btn-lg">Voir toutes les catégories</a> {# Placeholder pour URL toutes catégories #}
+            </div>
+        </div>
+    </section>
+
+    {# Section Produits Phares / Nouveautés  #}
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center fw-bold text-primary mb-5">Nos Nouveautés</h2>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                
+                {% if nouveaux_produits %}
+                    {% for produit in nouveaux_produits %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm product-card-home">
+                            {% if produit.image %}
+                                <img src="{{ produit.image.url }}" class="card-img-top" alt="{{ produit.nom }}">
+                            {% else %}
+                                <img src="{% static 'img/default.jpg' %}" class="card-img-top" alt="Image par défaut">
+                            {% endif %}
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title fw-semibold">{{ produit.nom }}</h5>
+                                <p class="card-text text-muted small">{{ produit.description|truncatewords:10 }}</p>
+                                <p class="fw-bold fs-5 text-success mt-auto">{{ produit.prix }} €</p>
+                            </div>
+                            <div class="card-footer bg-white border-0 pt-0 pb-3">
+                                <div class="d-grid">
+                                    <a href="{% url 'produit_detail' produit.pk %}" class="btn btn-primary btn-sm">Voir Détails</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12 text-center">
+                        <p class="text-muted">Aucun nouveau produit à afficher pour le moment.</p>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="text-center mt-5">
+                <a href="{% url 'liste_produits' %}" class="btn btn-outline-primary btn-lg">Voir tous les produits</a>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}

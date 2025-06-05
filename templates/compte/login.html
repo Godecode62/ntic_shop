@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion - NTICShop{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white text-center">
+                <h3 class="mb-0">Connectez-vous</h3>
+            </div>
+            <div class="card-body">
+                {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    Votre nom d'utilisateur et/ou mot de passe sont incorrects. Veuillez réessayer.
+                </div>
+                {% endif %}
+
+                {% if next %}
+                    {% if user.is_authenticated %}
+                    <div class="alert alert-warning" role="alert">
+                        Vous n'avez pas l'autorisation d'accéder à cette page ({{ next }}).
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info" role="alert">
+                        Veuillez vous connecter pour voir cette page.
+                    </div>
+                    {% endif %}
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ form.username.id_for_label }}" class="form-label">Nom d'utilisateur</label>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <div class="text-danger small">{{ form.username.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.password.id_for_label }}" class="form-label">Mot de passe</label>
+                        {{ form.password }}
+                        {% if form.password.errors %}
+                            <div class="text-danger small">{{ form.password.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100 mb-3">Se connecter</button>
+                    <input type="hidden" name="next" value="{{ next }}">
+                </form>
+                <div class="text-center">
+                    <a href="#" class="text-muted text-decoration-none">Mot de passe oublié ?</a>
+                    <p class="mt-3">Pas encore de compte ? <a href="#" class="text-decoration-none">S'inscrire ici</a></p> {# Adaptez 'register' à votre URL d'inscription #}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Optionnel: Ajoutez du style spécifique ici si nécessaire */
+    .card-header {
+        border-bottom: none;
+    }
+    .form-control {
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+</style>
+{% endblock %}

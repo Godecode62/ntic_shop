@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+    <center>
+        <h1>Etes vous sûr de vouloir supprimer cet article?</h1>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <button class="btn btn-danger">Supprimer</button>
+            <a href="{% url 'article_list' %}" class="btn btn-primary">Annuler</a>
+        </form>
+    </center>
+{% endblock content %}

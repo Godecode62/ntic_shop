@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+ 
+    <div class="container">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Ajouter un produit</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        {{ form.nom }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.description }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.prix }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.stock }}
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        {{ form.disponible }}
+                        <label class="form-check-label">Disponible</label>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.image }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.categorie }}
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Enregistrer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

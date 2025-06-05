@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+
+{% load static %}
+
+    {% block extra_css %}
+        <style>
+        .produit-img {
+            max-height: 400px;
+            object-fit: cover;
+        }
+    </style>
+
+    
+    {% endblock extra_css %}
+{% block content %}
+
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow border-0">
+                <div class="row g-0">
+                    <div class="col-md-5">
+                        {% if produit.image %}
+                            <img src="{{ produit.image.url }}" class="img-fluid produit-img rounded-start" alt="{{ produit.nom }}">
+                        {% else %}
+                            <img src="{% static 'img/default.jpg' %}" class="img-fluid produit-img rounded-start" alt="Image par défaut">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <h3 class="card-title text-primary">{{ produit.nom }}</h3>
+                            <p class="text-muted mb-2"><strong>Catégorie :</strong> {{ produit.categorie.nom }}</p>
+                            <p class="card-text">{{ produit.description }}</p>
+                            <p class="fw-bold fs-4 text-success">{{ produit.prix }} €</p>
+                            <p>
+                                <span class="badge bg-{{ produit.disponible|yesno:'success,danger' }}">
+                                    {{ produit.disponible|yesno:"Disponible,Indisponible" }}
+                                </span>
+                            </p>
+                            <button type="submit" class="btn btn-success me-2">
+                                    Ajouter au panier
+                            </button>
+
+                            <a href="{% url 'liste_produits' %}" class="btn btn-outline-secondary">
+                                    Retour à la boutique
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+
+{% endblock content %}

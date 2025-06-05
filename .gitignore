@@ -1,0 +1,16 @@
+# Ignorer l'environnement virtuel
+environne/
+
+# Fichiers Python compilés
+*.pyc
+__pycache__/
+
+# Fichiers SQLite (si tu utilises SQLite)
+db.sqlite3
+
+# Dossiers médias/statics générés (si applicable)
+media/
+staticfiles/
+
+# Autres fichiers à ignorer selon besoin
+.DS_Store

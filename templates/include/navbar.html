@@ -1,0 +1,81 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold text-white" href="{% url 'liste_produits' %}">NTICShop</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" 
+            aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+        <li class="nav-item">
+          <a class="nav-link active text-white" aria-current="page" href="{% url 'home' %}">Accueil</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="{% url 'liste_produits' %}">Nos Produits</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Catégories
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            {# DÉBUT DE LA SECTION MODIFIÉE : REMPLACEMENT DES LIENS STATIQUES PAR UNE BOUCLE DYNAMIQUE #}
+            {% for cat in all_categories %}
+            <li><a class="dropdown-item" href="{% url 'produits_par_categorie' category_slug=cat.slug %}">{{ cat.nom }}</a></li>
+            {% empty %}
+            <li><span class="dropdown-item disabled">Aucune catégorie disponible</span></li>
+            {% endfor %}
+            {# FIN DE LA SECTION MODIFIÉE #}
+            {# Tu peux garder ce lien vers "Toutes les catégories" s'il est utile #}
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'liste_produits' %}">Toutes les catégories</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#">Contact</a>
+        </li>
+      </ul>
+
+
+      <ul class="navbar-nav">
+        {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser %} {# ou is_staff si c'est suffisant pour accéder au dashboard #}
+              <li class="nav-item me-2">
+                <a class="nav-link btn btn-success text-white px-3" href="{% url 'admin_dashboard' %}">Dashboard Admin</a>
+              </li>
+              <li class="nav-item me-2">
+                <a class="nav-link btn btn-primary text-white px-3" href="{% url 'create_produit' %}">Ajouter Produit</a>
+              </li>
+            {% endif %}
+
+            <li class="nav-item me-2">
+                <a class="nav-link text-white" href="#">Panier <i class="bi bi-cart"></i></a> {# Placeholder pour URL Panier #}
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ request.user.username }} <i class="bi bi-person-circle"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="navbarDropdownUser">
+                    <li><a class="dropdown-item" href="#">Mon profil</a></li> {# Placeholder pour URL Profil Utilisateur #}
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form method="post" action="{% url 'logout' %}" style="display: inline-block; width: 100%;">
+                          {% csrf_token %}
+                          <button type="submit" class="dropdown-item text-danger">Déconnexion</button>
+                      </form>
+                    </li>
+                </ul>
+            </li>
+        {% else %}
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'login' %}">Connexion</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn btn-outline-light ms-2 px-3" href="#">Inscription</a> {# Placeholder pour URL Inscription #}
+            </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
