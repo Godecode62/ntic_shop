@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Commande Confirmée - NTICShop{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4 text-center">
+            <h1 class="card-title text-success mb-4">
+                <i class="bi bi-check-circle-fill me-2"></i> Commande Confirmée !
+            </h1>
+            <p class="lead">Merci pour votre commande, {{ commande.nom }} {{ commande.prenom }} !</p>
+            <p>Votre numéro de commande est le : <strong>#{{ commande.id }}</strong></p>
+            <p>Un email de confirmation a été envoyé à <strong>{{ commande.email }}</strong>.</p>
+            
+            <hr class="my-4">
+
+            <h4 class="text-start mb-3">Détails de la Commande :</h4>
+            <ul class="list-group list-group-flush text-start mb-4">
+                {% for item in commande.items.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ item.produit.nom }}</strong>
+                        <span class="text-muted"> ({{ item.quantite }} x {{ item.prix|floatformat:2 }} €)</span>
+                    </div>
+                    <span class="fw-bold">{{ item.get_cost|floatformat:2 }} €</span>
+                </li>
+                {% endfor %}
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-light fw-bold">
+                    Total :
+                    <span>{{ commande.get_total_cost|floatformat:2 }} €</span>
+                </li>
+            </ul>
+
+            <h5 class="text-start mb-3">Informations de Livraison :</h5>
+            <div class="card text-start bg-light mb-4">
+                <div class="card-body">
+                    <p class="card-text mb-1">{{ commande.nom }} {{ commande.prenom }}</p>
+                    <p class="card-text mb-1">{{ commande.adresse }}</p>
+                    <p class="card-text mb-1">{{ commande.code_postal }} {{ commande.ville }}</p>
+                    <p class="card-text mb-0">{{ commande.email }}</p>
+                </div>
+            </div>
+
+            <a href="{% url 'liste_produits' %}" class="btn btn-primary btn-lg mt-3">
+                <i class="bi bi-shop me-2"></i> Retourner à la boutique
+            </a>
+            <a href="{% url 'historique_commandes' %}" class="btn btn-outline-secondary btn-lg mt-3 ms-2">
+                Voir mes commandes
+            </a> 
+        </div>
+    </div>
+</div>
+{% endblock content %}

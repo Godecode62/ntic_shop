@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Finaliser la Commande - NTICShop{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="text-primary mb-4 text-center">Finaliser votre Commande</h1>
+            <p class="lead text-center mb-5">Veuillez vérifier et compléter vos informations de livraison.</p>
+
+            {% if messages %}
+                <div class="messages mb-4">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h4 class="mb-3">Résumé de votre Panier</h4>
+                    <ul class="list-group mb-4">
+                        {% for item in panier.items.all %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ item.produit.nom }}</strong>
+                                    <span class="text-muted"> (x{{ item.quantite }})</span>
+                                </div>
+                                <span class="fw-bold">{{ item.get_cost|floatformat:2 }} €</span>
+                            </li>
+                        {% endfor %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-light fw-bold">
+                            Total du Panier :
+                            <span>{{ panier.get_total_price|floatformat:2 }} €</span>
+                        </li>
+                    </ul>
+
+                    <h4 class="mb-3">Informations de Livraison</h4>
+                    <form method="post" action="{% url 'creer_commande' %}">
+                        {% csrf_token %}
+                        
+                        {# Afficher les champs du formulaire avec des classes Bootstrap #}
+                        {% for field in form %}
+                            <div class="mb-3">
+                                {{ field.label_tag }}
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <div class="form-text">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+
+                        <hr class="my-4">
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                Confirmer la Commande et Payer
+                            </button>
+                            <a href="{% url 'voir_panier' %}" class="btn btn-outline-secondary btn-lg">
+                                <i class="bi bi-arrow-left"></i> Retour au Panier
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

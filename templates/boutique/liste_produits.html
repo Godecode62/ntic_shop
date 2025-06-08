@@ -6,13 +6,6 @@
     .card-title {
         min-height: 3rem;
     }
-    .btn-pair {
-        display: flex;
-        gap: 0.5rem;
-    }
-    .btn-pair .btn {
-        flex: 1;
-    }
     .card-img-top {
         height: 200px;
         object-fit: cover;
@@ -50,7 +43,6 @@
 <div class="container py-5">
     <div class="header-section">
         <h2 class="text-primary text-center text-lg-start mb-3 mb-lg-0">
-            {# Le titre change en fonction de la catégorie actuelle #}
             {% if current_category %}
                 Produits - {{ current_category.nom }}
             {% else %}
@@ -58,10 +50,9 @@
             {% endif %}
         </h2>
         <div class="search-bar">
-            {# Le formulaire de recherche doit pointer vers la bonne URL #}
-            <form class="d-flex" role="search" method="get" 
+            <form class="d-flex" role="search" method="get"
                   action="{% if current_category %}{% url 'produits_par_categorie' category_slug=current_category.slug %}{% else %}{% url 'liste_produits' %}{% endif %}">
-                <input class="form-control me-2" type="search" placeholder="Rechercher un produit..." aria-label="Search" name="q" 
+                <input class="form-control me-2" type="search" placeholder="Rechercher un produit..." aria-label="Search" name="q"
                        value="{{ request.GET.q|default:'' }}" />
                 <button class="btn btn-primary" type="submit">Rechercher</button>
             </form>
@@ -69,10 +60,11 @@
     </div>
 
     {% if object_list %}
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-2 g-4">
+        {# CHANGEMENT ICI : row-cols-md-2 au lieu de 3, 4 ou 5 #}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-4">
             {% for produit in object_list %}
                 <div class="col">
-                    <div class="card h-100 shadow-sm border-0">
+                    <div class="card h-100 shadow-sm border-0 d-flex flex-column">
                         {% if produit.image %}
                             <img src="{{ produit.image.url }}" class="card-img-top" alt="{{ produit.nom }}">
                         {% else %}
@@ -81,27 +73,22 @@
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title fw-semibold">{{ produit.nom }}</h5>
                             <p class="card-text text-muted small">{{ produit.description|truncatewords:20 }}</p>
-                            
+
                             <p class="card-text">
-                                <small class="text-muted">Catégorie: 
+                                <small class="text-muted">Catégorie:
                                     <span class="badge bg-secondary">{{ produit.categorie.nom }}</span>
                                 </small>
                             </p>
 
-                            <p class="fw-bold fs-5 text-success mt-auto">{{ produit.prix }} €</p>
+                            <p class="fw-bold fs-5 text-success mt-auto">{{ produit.prix|floatformat:2 }} €</p>
                             <span class="badge bg-{{ produit.disponible|yesno:'success,danger' }} mt-2">
                                 {{ produit.disponible|yesno:"Disponible,Indisponible" }}
                             </span>
                         </div>
-                        <div class="card-footer bg-white border-0 pt-0 pb-3">
-                            <div class="btn-pair">
-                                <a href="{% url 'produit_detail' produit.pk %}" class="btn btn-outline-primary btn-sm">
-                                    Détail
-                                </a>
-                                <button type="submit" class="btn btn-success btn-sm">
-                                    Ajouter
-                                </button>
-                            </div>
+                        <div class="card-footer bg-white border-0 pt-0 pb-3 text-center">
+                            <a href="{% url 'produit_detail' pk=produit.id %}" class="btn btn-outline-primary btn-sm">
+                                Détail
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -113,11 +100,10 @@
                 <ul class="pagination">
                     {% if page_obj.has_previous %}
                         <li class="page-item">
-                            {# Conserve le paramètre 'q' et le 'category_slug' pour la pagination #}
-                            <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo;</a>
+                            <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if current_category %}&category={{ current_category.slug }}{% endif %}">&laquo;</a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Précédent</a>
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if current_category %}&category={{ current_category.slug }}{% endif %}">Précédent</a>
                         </li>
                     {% else %}
                         <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
@@ -129,17 +115,17 @@
                             {% if page_obj.number == i %}
                                 <li class="page-item active" aria-current="page"><span class="page-link">{{ i }}</span></li>
                             {% else %}
-                                <li class="page-item"><a class="page-link" href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a></li>
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if current_category %}&category={{ current_category.slug }}{% endif %}">{{ i }}</a></li>
                             {% endif %}
                         {% endif %}
                     {% endfor %}
 
                     {% if page_obj.has_next %}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Suivant</a>
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if current_category %}&category={{ current_category.slug }}{% endif %}">Suivant</a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&raquo;</a>
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if current_category %}&category={{ current_category.slug }}{% endif %}">&raquo;</a>
                         </li>
                     {% else %}
                         <li class="page-item disabled"><span class="page-link">Suivant</span></li>

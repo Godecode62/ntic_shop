@@ -1,0 +1,85 @@
+{% extends "base.html" %} {# Hérite de ton template de base #}
+{% load static %} {# Si tu as des images statiques ou d'autres fichiers #}
+
+{% block title %}Votre Panier - NTICShop{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">Votre Panier</h1>
+
+    {% if panier.items.all %} {# Vérifie s'il y a des articles dans le panier #}
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Produit</th>
+                                <th scope="col">Prix Unitaire</th>
+                                <th scope="col">Quantité</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in panier.items.all %}
+                            <tr>
+                                <td class="align-middle">
+                                    <div class="d-flex align-items-center">
+                                        {% if item.produit.image %}
+                                            <img src="{{ item.produit.image.url }}" alt="{{ item.produit.nom }}" class="img-thumbnail me-3" style="width: 80px; height: 80px; object-fit: cover;">
+                                        {% endif %}
+                                        <a href="{% url 'produit_detail' pk=item.produit.id %}" class="text-decoration-none text-dark fw-bold">{{ item.produit.nom }}</a>
+                                    </div>
+                                </td>
+                                <td class="align-middle">{{ item.produit.prix|floatformat:2 }} GNF</td>
+                                <td class="align-middle">
+                                    <form action="{% url 'maj_quantite_panier' article_id=item.id %}" method="post" class="d-inline-flex align-items-center">
+                                        {% csrf_token %} {# Très important pour la sécurité des formulaires Django #}
+                                        <input type="number" name="quantite" value="{{ item.quantite }}" min="1" class="form-control form-control-sm text-center" style="width: 70px;" aria-label="Quantité">
+                                        <button type="submit" class="btn btn-sm btn-outline-primary ms-2">Mettre à jour</button>
+                                    </form>
+                                </td>
+                                <td class="align-middle fw-bold">{{ item.get_total|floatformat:2 }} GNF</td>
+                                <td class="align-middle">
+                                    <form action="{% url 'retirer_du_panier' article_id=item.id %}" method="post" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger" aria-label="Retirer du panier">
+                                            <i class="bi bi-trash"></i> Retirer
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-light">
+                                <td colspan="3" class="text-end fw-bold fs-5">Total du Panier :</td>
+                                <td class="fw-bold fs-5">{{ panier.get_total_price|floatformat:2 }} GNF</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+
+            <a href="{% url 'liste_produits' %}" class="btn btn-outline-secondary btn-lg">
+                <i class="bi bi-arrow-left"></i> Continuer vos achats
+            </a>
+
+            <a href="{% url 'creer_commande' %}" class="btn btn-success btn-lg">
+                Commander <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+    {% else %}
+        <div class="alert alert-info text-center py-4" role="alert">
+            <p class="lead mb-0">Votre panier est actuellement vide.</p>
+            <a href="{% url 'liste_produits' %}" class="alert-link">Commencez vos achats dès maintenant !</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}

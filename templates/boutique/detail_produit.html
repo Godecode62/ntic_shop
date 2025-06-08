@@ -1,20 +1,17 @@
 {% extends "base.html" %}
 
-
 {% load static %}
 
-    {% block extra_css %}
-        <style>
+{% block extra_css %}
+    <style>
         .produit-img {
             max-height: 400px;
             object-fit: cover;
         }
     </style>
+{% endblock extra_css %}
 
-    
-    {% endblock extra_css %}
 {% block content %}
-
 
 <div class="container py-5">
     <div class="row justify-content-center">
@@ -25,6 +22,7 @@
                         {% if produit.image %}
                             <img src="{{ produit.image.url }}" class="img-fluid produit-img rounded-start" alt="{{ produit.nom }}">
                         {% else %}
+                            {# Utilise 'static' pour référencer ton image par défaut #}
                             <img src="{% static 'img/default.jpg' %}" class="img-fluid produit-img rounded-start" alt="Image par défaut">
                         {% endif %}
                     </div>
@@ -33,18 +31,38 @@
                             <h3 class="card-title text-primary">{{ produit.nom }}</h3>
                             <p class="text-muted mb-2"><strong>Catégorie :</strong> {{ produit.categorie.nom }}</p>
                             <p class="card-text">{{ produit.description }}</p>
-                            <p class="fw-bold fs-4 text-success">{{ produit.prix }} €</p>
+                            <p class="fw-bold fs-4 text-success">{{ produit.prix|floatformat:2 }} €</p> {# Utilise floatformat pour les prix #}
                             <p>
                                 <span class="badge bg-{{ produit.disponible|yesno:'success,danger' }}">
                                     {{ produit.disponible|yesno:"Disponible,Indisponible" }}
                                 </span>
                             </p>
-                            <button type="submit" class="btn btn-success me-2">
-                                    Ajouter au panier
-                            </button>
 
-                            <a href="{% url 'liste_produits' %}" class="btn btn-outline-secondary">
-                                    Retour à la boutique
+                            {% if request.user.is_authenticated %} {# VÉRIFIE SI L'UTILISATEUR EST CONNECTÉ #}
+                                {% comment %} On verifie si le produit est dispo et si le stock est superieur à 0 {% endcomment %}
+                                {% if produit.disponible and produit.stock > 0 %}
+                                    <form action="{% url 'ajouter_au_panier' produit_id=produit.id %}" method="post" class="d-flex align-items-center mt-4">
+                                        {% csrf_token %} 
+                                        <label for="quantite_produit" class="form-label me-2 mb-0">Quantité :</label>
+                                        <input type="number" name="quantite" id="quantite_produit" value="1" min="1" max="{{ produit.stock }}" class="form-control me-3" style="width: 80px;" aria-label="Quantité du produit">
+                                        <button type="submit" class="btn btn-success btn-lg">
+                                            <i class="bi bi-cart-plus me-2"></i> Ajouter au panier {# Assure-toi d'avoir les Bootstrap Icons #}
+                                        </button>
+                                    </form>
+                                    <p class="mt-2 text-success">En stock : {{ produit.stock }}</p>
+                                {% else %}
+                                    <p class="text-danger mt-4 lead">Ce produit n'est pas disponible pour le moment.</p>
+                                {% endif %}
+                            {% else %}
+                                {# MESSAGE POUR LES UTILISATEURS NON CONNECTÉS #}
+                                <div class="alert alert-warning mt-4 text-center py-3">
+                                    <p class="mb-0 lead">Vous devez être <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link fw-bold">connecté</a> pour ajouter des articles au panier.</p>
+                                </div>
+                            {% endif %}
+                            {# --- FIN DE LA LOGIQUE D'AJOUT AU PANIER POUR UTILISATEUR CONNECTÉ --- #}
+
+                            <a href="{% url 'liste_produits' %}" class="btn btn-outline-secondary mt-3">
+                                <i class="bi bi-arrow-left"></i> Retour à la boutique {# Assure-toi d'avoir les Bootstrap Icons #}
                             </a>
 
                         </div>

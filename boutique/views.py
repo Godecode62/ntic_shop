@@ -109,8 +109,10 @@ class ProduitDetail(DetailView):
 def home_page_view(request):
     # Récupère les derniers produits ajoutés (les 8 derniers)
     nouveaux_produits = Produit.objects.order_by('-date_ajout')[:8]
+    categories = Categorie.objects.all().order_by('nom')
 
     context = {
-        'nouveaux_produits': nouveaux_produits
+        'nouveaux_produits': nouveaux_produits,
+        'categories': categories,
     }
     return render(request, 'index.html', context)
