@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mon Compte - NTICShop{% endblock %}
+
+{% block extra_css %}
+<style>
+    .account-card {
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 0.75rem;
+        transition: transform 0.2s ease-in-out;
+    }
+    .account-card:hover {
+        transform: translateY(-5px);
+    }
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid #007bff; /* Primary color border */
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .info-item {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #eee;
+    }
+    .info-item:last-child {
+        border-bottom: none;
+    }
+    .info-label {
+        font-weight: 600;
+        color: #555;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+        <div class="card account-card p-4">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <img src="{% static 'images/avatar.png' %}" alt="Avatar" class="profile-avatar mb-3">
+                    <h2 class="card-title text-primary">{{ user.username }}</h2>
+                    <p class="text-muted mb-0">{{ user.email }}</p>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item info-item">
+                        <div class="row">
+                            <div class="col-sm-4 info-label">Nom Complet</div>
+                           {% if user.first_name and user.last_name%}
+                                <div class="col-sm-8 text-end">{{ user.first_name }} {{ user.last_name }}</div>
+                                
+                           {% else %}
+                            <div class="col-sm-8 text-end">Non spécifié ou manquantes</div>
+                           {% endif %}
+                        </div>
+                    </div>
+                    <div class="list-group-item info-item">
+                        <div class="row">
+                            <div class="col-sm-4 info-label">Numéro de Téléphone</div>
+                            <div class="col-sm-8 text-end">{% if user.phone_number %}{{ user.phone_number }}{% else %}Non spécifié{% endif %}</div>
+                        </div>
+                    </div>
+                    <div class="list-group-item info-item">
+                        <div class="row">
+                            <div class="col-sm-4 info-label">Date d'inscription</div>
+                            <div class="col-sm-8 text-end">{{ user.date_joined|date:"d M Y H:i" }}</div>
+                        </div>
+                    </div>
+                    <div class="list-group-item info-item">
+                        <div class="row">
+                            <div class="col-sm-4 info-label">Dernière connexion</div>
+                            <div class="col-sm-8 text-end">{{ user.last_login|date:"d M Y H:i" }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                    <a href="{% url 'update_account' %}" class="btn btn-primary btn-lg">Modifier le compte</a>
+                    <a href="{% url 'password_change' %}" class="btn btn-outline-secondary btn-lg">Changer le mot de passe</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

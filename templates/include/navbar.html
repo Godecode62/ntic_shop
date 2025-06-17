@@ -19,14 +19,13 @@
             Catégories
           </a>
           <ul class="dropdown-menu dropdown-menu-dark">
-            {# DÉBUT DE LA SECTION MODIFIÉE : REMPLACEMENT DES LIENS STATIQUES PAR UNE BOUCLE DYNAMIQUE #}
+
             {% for cat in all_categories %}
             <li><a class="dropdown-item" href="{% url 'produits_par_categorie' category_slug=cat.slug %}">{{ cat.nom }}</a></li>
             {% empty %}
             <li><span class="dropdown-item disabled">Aucune catégorie disponible</span></li>
             {% endfor %}
-            {# FIN DE LA SECTION MODIFIÉE #}
-            {# Tu peux garder ce lien vers "Toutes les catégories" s'il est utile #}
+
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{% url 'liste_produits' %}">Toutes les catégories</a></li>
           </ul>
@@ -43,9 +42,7 @@
               <li class="nav-item me-2">
                 <a class="nav-link btn btn-success text-white px-3" href="{% url 'admin_dashboard' %}">Dashboard Admin</a>
               </li>
-              <li class="nav-item me-2">
-                <a class="nav-link btn btn-primary text-white px-3" href="{% url 'create_produit' %}">Ajouter Produit</a>
-              </li>
+              
             {% endif %}
 
             <li class="nav-item me-2">
@@ -61,7 +58,7 @@
                     {{ request.user.username }} <i class="bi bi-person-circle"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="navbarDropdownUser">
-                    <li><a class="dropdown-item" href="#">Mon profil</a></li> {# Placeholder pour URL Profil Utilisateur #}
+                    <li><a class="dropdown-item" href="{% url 'my_account' %}">Mon profil</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <form method="post" action="{% url 'logout' %}" style="display: inline-block; width: 100%;">

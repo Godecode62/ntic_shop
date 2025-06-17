@@ -37,7 +37,7 @@ class ProductDelete(UserAdminRequired,DeleteView):
 class PruduitUpdate(UserAdminRequired,UpdateView):
     model = Produit
     form_class = ProduitForm
-    template_name = 'boutique/produit_update.html'
+    template_name = 'boutique/produit_create.html'
     success_url = reverse_lazy('liste_produits')
 
     def get_object(self, queryset=None):

@@ -66,6 +66,8 @@ def creer_commande(request):
                             quantite=quantite_commandee
                         )
                         produit.stock -= quantite_commandee
+                        if produit.stock <= 0:
+                            produit.disponible = False
                         produit.save()
                         
                         article_panier.delete()
@@ -83,7 +85,7 @@ def creer_commande(request):
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f"Erreur dans le champ '{form[field].label}': {error}")
-            return redirect(reverse('voir_panier')) # On redirige pour l'instant
+            return redirect(reverse('voir_panier')) 
     else:
         # Pour une requête GET, crée une instance vide du formulaire
         form = CommandeForm(user=request.user) # Passe l'utilisateur au formulaire pour pré-remplir

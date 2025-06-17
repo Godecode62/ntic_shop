@@ -60,7 +60,6 @@
     </div>
 
     {% if object_list %}
-        {# CHANGEMENT ICI : row-cols-md-2 au lieu de 3, 4 ou 5 #}
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-4">
             {% for produit in object_list %}
                 <div class="col">
@@ -80,7 +79,7 @@
                                 </small>
                             </p>
 
-                            <p class="fw-bold fs-5 text-success mt-auto">{{ produit.prix|floatformat:2 }} €</p>
+                            <p class="fw-bold fs-5 text-success mt-auto">{{ produit.prix|floatformat:2 }} GNF</p>
                             <span class="badge bg-{{ produit.disponible|yesno:'success,danger' }} mt-2">
                                 {{ produit.disponible|yesno:"Disponible,Indisponible" }}
                             </span>
@@ -89,6 +88,15 @@
                             <a href="{% url 'produit_detail' pk=produit.id %}" class="btn btn-outline-primary btn-sm">
                                 Détail
                             </a>
+                            {# Ajout des boutons Modifier et Supprimer ici #}
+                            {% if user.is_authenticated and user.is_superuser %}
+                                <a href="{% url 'update_produit' pk=produit.id %}" class="btn btn-outline-warning btn-sm ms-2">
+                                    Modifier
+                                </a>
+                                <a href="{% url 'delete_produit' pk=produit.id %}" class="btn btn-outline-danger btn-sm ms-2">
+                                    Supprimer
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

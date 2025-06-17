@@ -31,7 +31,7 @@
                             <h3 class="card-title text-primary">{{ produit.nom }}</h3>
                             <p class="text-muted mb-2"><strong>Catégorie :</strong> {{ produit.categorie.nom }}</p>
                             <p class="card-text">{{ produit.description }}</p>
-                            <p class="fw-bold fs-4 text-success">{{ produit.prix|floatformat:2 }} €</p> {# Utilise floatformat pour les prix #}
+                            <p class="fw-bold fs-4 text-success">{{ produit.prix|floatformat:2 }} GNF</p> {# Utilise floatformat pour les prix #}
                             <p>
                                 <span class="badge bg-{{ produit.disponible|yesno:'success,danger' }}">
                                     {{ produit.disponible|yesno:"Disponible,Indisponible" }}

@@ -1,68 +1,197 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Dashboard Admin - NTICShop{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Tableau de Bord Administrateur</h1>
+<div class="container-fluid py-4"> {# Utilisation de container-fluid pour une largeur pleine #}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom">
+        <h1 class="h2 text-primary fw-bold">Tableau de Bord Administratif</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            {# Vous pourriez ajouter ici des boutons d'actions rapides si nécessaire, ex: Ajouter un produit #}
+            {# <button type="button" class="btn btn-sm btn-outline-secondary">Exporter Rapport</button> #}
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-4">
+        {# Carte 1: Gestion des Produits #}
+        <div class="col">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-box-seam display-6 text-primary me-3"></i>
+                        <h5 class="card-title fw-bold text-primary mb-0">Gestion des Produits</h5>
+                    </div>
+                    <p class="card-text text-muted">Aperçu et actions pour les produits de votre catalogue.</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                            Total Produits
+                            <span class="badge bg-primary rounded-pill">{% if total_produits %}{{ total_produits }}{% else %}N/A{% endif %}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                            Produits en Stock
+                            <span class="badge bg-success rounded-pill">{% if produits_disponibles %}{{ produits_disponibles }}{% else %}N/A{% endif %}</span>
+                        </li>
+                    </ul>
+                    <div class="mt-auto d-grid gap-2">
+                        <a href="{% url 'liste_produits' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-eye me-2"></i>Voir tous les produits
+                        </a>
+                        <a href="{% url 'create_produit' %}" class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-2"></i>Ajouter un produit
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Carte 2: Gestion des Commandes #}
+        <div class="col">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-receipt display-6 text-success me-3"></i>
+                        <h5 class="card-title fw-bold text-success mb-0">Gestion des Commandes</h5>
+                    </div>
+                    <p class="card-text text-muted">Consultez et gérez les commandes passées par vos clients.</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                            Commandes en attente
+                            <span class="badge bg-warning text-dark rounded-pill">{% if commandes_en_attente %}{{ commandes_en_attente }}{% else %}N/A{% endif %}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                            Commandes expédiées
+                            <span class="badge bg-info rounded-pill">{% if commandes_expediees %}{{ commandes_expediees }}{% else %}N/A{% endif %}</span>
+                        </li>
+                    </ul>
+                    <div class="mt-auto d-grid gap-2">
+                        <a href="{% url 'gestion_commandes_admin' %}" class="btn btn-outline-success">
+                            <i class="bi bi-list-ul me-2"></i>Voir toutes les commandes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Carte 3: Gestion des Utilisateurs #}
+        <div class="col">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-people display-6 text-info me-3"></i>
+                        <h5 class="card-title fw-bold text-info mb-0">Gestion des Utilisateurs</h5>
+                    </div>
+                    <p class="card-text text-muted">Gérez les comptes clients et le personnel de votre boutique.</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                            Total Utilisateurs
+                            <span class="badge bg-info rounded-pill">{% if total_utilisateurs %}{{ total_utilisateurs }}{% else %}N/A{% endif %}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                            Utilisateurs Staff
+                            <span class="badge bg-secondary rounded-pill">{% if utilisateurs_staff %}{{ utilisateurs_staff }}{% else %}N/A{% endif %}</span>
+                        </li>
+                    </ul>
+                    <div class="mt-auto d-grid gap-2">
+                        <a href="{% url 'show_all_users' %}" class="btn btn-outline-info">
+                            <i class="bi bi-person-lines-fill me-2"></i>Voir les utilisateurs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Carte 4: Statistiques Rapides #}
+        <div class="col">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-graph-up display-6 text-warning me-3"></i>
+                        <h5 class="card-title fw-bold text-warning mb-0">Statistiques Rapides</h5>
+                    </div>
+                    <p class="card-text text-muted">Aperçu des performances clés de votre boutique.</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                            Revenu Total (24h)
+                            <span class="fw-bold text-success">{% if revenu_total_24h %}{{ revenu_total_24h|floatformat:2 }} GNF{% else %}N/A{% endif %}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                            Nouvelles Commandes (24h)
+                            <span class="badge bg-primary rounded-pill">{% if nouvelles_commandes_24h %}{{ nouvelles_commandes_24h }}{% else %}N/A{% endif %}</span>
+                        </li>
+                    </ul>
+                    <div class="mt-auto d-grid gap-2">
+                        <a href="#" class="btn btn-outline-warning disabled" aria-disabled="true">
+                            <i class="bi bi-bar-chart me-2"></i>Voir les rapports détaillés
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5">
+
 </div>
-
-<div class="row">
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-sm h-100">
-            <div class="card-body">
-                <h5 class="card-title text-primary"><i class="bi bi-box-seam me-2"></i>Gestion des Produits</h5>
-                <p class="card-text">Ajoutez, modifiez ou supprimez des produits de votre boutique.</p>
-                <a href="{% url 'liste_produits' %}" class="btn btn-outline-primary btn-sm me-2">Voir tous les produits</a>
-                <a href="{% url 'create_produit' %}" class="btn btn-primary btn-sm">Ajouter un produit</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-sm h-100">
-            <div class="card-body">
-                <h5 class="card-title text-success"><i class="bi bi-receipt me-2"></i>Gestion des Commandes</h5>
-                <p class="card-text">Consultez et gérez les commandes passées par vos clients.</p>
-                <a href="{% url 'gestion_commandes_admin' %}" class="btn btn-outline-success">Voir toutes les commandes</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-sm h-100">
-            <div class="card-body">
-                <h5 class="card-title text-info"><i class="bi bi-people me-2"></i>Gestion des Utilisateurs</h5>
-                <p class="card-text">Gérez les comptes clients et le personnel de votre boutique.</p>
-                <a href="#" class="btn btn-outline-info btn-sm disabled" aria-disabled="true">Voir les utilisateurs</a> {# Placeholder #}
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-sm h-100">
-            <div class="card-body">
-                <h5 class="card-title text-warning"><i class="bi bi-graph-up me-2"></i>Statistiques Rapides</h5>
-                <p class="card-text">Aperçu rapide des ventes, du stock et des nouveaux clients.</p>
-                <p class="card-text"><small class="text-muted">Fonctionnalité à implémenter.</small></p>
-                <a href="#" class="btn btn-outline-warning btn-sm disabled" aria-disabled="true">Voir les rapports</a> {# Placeholder #}
-            </div>
-        </div>
-    </div>
-</div>
-
-<hr>
-
 {% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <style>
+    body {
+        background-color: #f8f9fa; /* Léger arrière-plan pour le corps */
+    }
     .card {
-        transition: transform 0.2s ease-in-out;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        border-radius: 0.75rem; /* Coins plus arrondis */
     }
     .card:hover {
-        transform: translateY(-5px);
+        transform: translateY(-8px); /* Plus grand effet au survol */
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important; /* Ombre plus prononcée */
+    }
+    .card-title {
+        font-size: 1.35rem; /* Titre de carte légèrement plus grand */
+    }
+    .card-body {
+        padding: 1.75rem; /* Plus d'espace interne */
+    }
+    .display-6 {
+        font-size: 3rem; /* Taille plus grande pour les icônes principales */
+    }
+    .list-group-item {
+        border-color: rgba(0,0,0,0.05); /* Bordure légère pour les éléments de liste */
+        font-size: 0.95rem;
+    }
+    .btn {
+        font-weight: 500;
+        border-radius: 0.5rem; /* Boutons plus arrondis */
+    }
+    .btn-outline-primary, .btn-outline-success, .btn-outline-info, .btn-outline-warning {
+        border-width: 2px; /* Bordures plus épaisses pour les boutons outline */
+    }
+    .btn-primary, .btn-success, .btn-info, .btn-warning {
+        box-shadow: 0 4px 10px rgba(0,123,255,0.2); /* Ombre légère pour les boutons pleins */
+    }
+    .btn-primary:hover, .btn-success:hover, .btn-info:hover, .btn-warning:hover {
+        box-shadow: 0 6px 15px rgba(0,123,255,0.3); /* Ombre plus intense au survol */
+    }
+    .header-info-box {
+        background-color: #e0f7fa; /* Un fond doux */
+        border-left: 5px solid #00bcd4; /* Une bordure colorée */
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    .header-info-box i {
+        font-size: 3rem;
+        color: #00bcd4;
+    }
+    .header-info-box h3 {
+        margin-bottom: 0.5rem;
+        color: #007bff;
     }
 </style>
 {% endblock %}

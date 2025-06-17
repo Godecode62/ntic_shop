@@ -21,14 +21,14 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div>
                         <strong>{{ item.produit.nom }}</strong>
-                        <span class="text-muted"> ({{ item.quantite }} x {{ item.prix|floatformat:2 }} €)</span>
+                        <span class="text-muted"> ({{ item.quantite }} x {{ item.prix|floatformat:2 }} GNF)</span>
                     </div>
-                    <span class="fw-bold">{{ item.get_cost|floatformat:2 }} €</span>
+                    <span class="fw-bold">{{ item.get_cost|floatformat:2 }} GNF</span>
                 </li>
                 {% endfor %}
                 <li class="list-group-item d-flex justify-content-between align-items-center bg-light fw-bold">
                     Total :
-                    <span>{{ commande.get_total_cost|floatformat:2 }} €</span>
+                    <span>{{ commande.get_total_cost|floatformat:2 }} GNF</span>
                 </li>
             </ul>
 
