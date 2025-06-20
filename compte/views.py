@@ -44,35 +44,23 @@ class LogoutUser(LogoutView):
     
 
 class UserRegistrationView(FormView):
-    """
-    Vue générique basée sur FormView pour l'inscription des utilisateurs.
-    """
+
     template_name = 'compte/register.html'
     form_class = UserRegistrationForm
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
-        """
-        Cette méthode est appelée lorsque le formulaire est valide.
-        Elle crée l'utilisateur et le connecte.
-        """
         user = form.save()
         login(self.request, user)
         return super().form_valid(form)
 
 
 class ShhowMyAccount(LoginRequiredMixin,DetailView):
-    """
-    Vue pour afficher les détails du compte de l'utilisateur connecté.
-    """
     model = User
     template_name = 'compte/my_account.html'
     context_object_name = 'user'
 
     def get_object(self, queryset=None):
-        """
-        Retourne l'utilisateur actuellement connecté.
-        """
         return self.request.user
     
 
